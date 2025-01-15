@@ -52,7 +52,9 @@ namespace SpaceRacer
         PointF lowTrianglep5 = new PointF(692, 585);
         PointF lowTrianglep6 = new PointF(668, 585);
 
-        List<Rectangle> obstacles = new List<Rectangle>();
+
+        List<Rectangle> obstaclesLeft = new List<Rectangle>();
+        List<Rectangle> obstaclesRight = new List<Rectangle>();
         List<int> obstacleSpeeds = new List<int>();
 
         //Brushes
@@ -158,33 +160,33 @@ namespace SpaceRacer
             {
                 int y = randGen.Next(0, this.Width - 50);
                 Rectangle obstacle = new Rectangle(0, y, obstacleWidth, obstacleHeight);
-                obstacles.Add(obstacle);
+                obstaclesLeft.Add(obstacle);
                 obstacleSpeeds.Add(randGen.Next(1, 6));
             }
             else if (randValue < 11)
             {
                 int y = randGen.Next(0, this.Width - 50);
                 Rectangle obstacle = new Rectangle(0, y, obstacleWidth, obstacleHeight);
-                obstacles.Add(obstacle);
+                obstaclesLeft.Add(obstacle);
                 obstacleSpeeds.Add(randGen.Next(1, 6));
             }
             else if (randValue < 17)
             {
                 int y = randGen.Next(0, this.Width - 50);
                 Rectangle obstacle = new Rectangle(0, y, obstacleWidth, obstacleHeight);
-                obstacles.Add(obstacle);
+                obstaclesLeft.Add(obstacle);
                 obstacleSpeeds.Add(randGen.Next(1, 6));
             }
 
-            for (int i = 0; i < obstacles.Count; i++)
+            for (int i = 0; i < obstaclesLeft.Count; i++)
             {
-                int x = obstacles[i].X + obstacleSpeeds[i];
-                obstacles[i] = new Rectangle(x, obstacles[i].Y, obstacleWidth, obstacleHeight);
+                int x = obstaclesLeft[i].X + obstacleSpeeds[i];
+                obstaclesLeft[i] = new Rectangle(x, obstaclesLeft[i].Y, obstacleWidth, obstacleHeight);
             }
 
-            for (int i = 0; i < obstacles.Count; i++)
+            for (int i = 0; i < obstaclesLeft.Count; i++)
             {
-                if (spaceShip1.IntersectsWith(obstacles[i]))
+                if (spaceShip1.IntersectsWith(obstaclesLeft[i]))
                 {
                     spaceShip1 = new Rectangle(270, 555, 20, 33);
                     spaceShip1Body = new Rectangle(275, 565, 10, 15);
@@ -196,8 +198,89 @@ namespace SpaceRacer
                     lowTrianglep3 = new PointF(268, 585);
                     thrustOne = new Rectangle(273, 585, 15, 3);
 
-                    obstacles.RemoveAt(i);
+                    obstaclesLeft.RemoveAt(i);
                     obstacleSpeeds.RemoveAt(i);
+                }
+                
+                if (spaceShip2.IntersectsWith(obstaclesLeft[i]))
+                {
+                    spaceShip2 = new Rectangle(670, 555, 20, 33);
+                    spaceShip2Body = new Rectangle(675, 565, 10, 15);
+                    topTrianglep4 = new PointF(680, 555);
+                    topTrianglep5 = new PointF(690, 565);
+                    topTrianglep6 = new PointF(670, 565);
+                    lowTrianglep4 = new PointF(680, 570);
+                    lowTrianglep5 = new PointF(692, 585);
+                    lowTrianglep6 = new PointF(668, 585);
+                    thrustTwo = new Rectangle(673, 585, 15, 3);
+
+                    obstaclesLeft.RemoveAt(i);
+                    obstacleSpeeds.RemoveAt(i);
+                }
+
+                int newrandValue = randGen.Next(1, 101);
+
+                if (newrandValue < 4)
+                {
+                    int y = randGen.Next(0, this.Width - 50);
+                    Rectangle obstacle = new Rectangle(this.Width, y, obstacleWidth, obstacleHeight);
+                    obstaclesLeft.Add(obstacle);
+                    obstacleSpeeds.Add(randGen.Next(1, 6));
+                }
+                else if (newrandValue < 11)
+                {
+                    int y = randGen.Next(0, this.Width - 50);
+                    Rectangle obstacle = new Rectangle(this.Width, y, obstacleWidth, obstacleHeight);
+                    obstaclesLeft.Add(obstacle);
+                    obstacleSpeeds.Add(randGen.Next(1, 6));
+                }
+                else if (newrandValue < 17)
+                {
+                    int y = randGen.Next(0, this.Width - 50);
+                    Rectangle obstacle = new Rectangle(this.Width, y, obstacleWidth, obstacleHeight);
+                    obstaclesRight.Add(obstacle);
+                    obstacleSpeeds.Add(randGen.Next(1, 6));
+                }
+
+                for (int a = 0; a < obstaclesRight.Count; a++)
+                {
+                    int x = obstaclesRight[a].X - obstacleSpeeds[a];
+                    obstaclesRight[a] = new Rectangle(x, obstaclesRight[a].Y, obstacleWidth, obstacleHeight);
+                }
+
+                for (int  a = 0; a < obstaclesRight.Count; a++)
+                {
+                    if (spaceShip1.IntersectsWith(obstaclesRight[a]))
+                    {
+                        spaceShip1 = new Rectangle(270, 555, 20, 33);
+                        spaceShip1Body = new Rectangle(275, 565, 10, 15);
+                        topTrianglep1 = new PointF(280, 555);
+                        topTrianglep2 = new PointF(290, 565);
+                        topTrianglep3 = new PointF(270, 565);
+                        lowTrianglep1 = new PointF(280, 570);
+                        lowTrianglep2 = new PointF(292, 585);
+                        lowTrianglep3 = new PointF(268, 585);
+                        thrustOne = new Rectangle(273, 585, 15, 3);
+
+                        obstaclesLeft.RemoveAt(a);
+                        obstacleSpeeds.RemoveAt(a);
+                    }
+
+                    if (spaceShip2.IntersectsWith(obstaclesRight[a]))
+                    {
+                        spaceShip2 = new Rectangle(670, 555, 20, 33);
+                        spaceShip2Body = new Rectangle(675, 565, 10, 15);
+                        topTrianglep4 = new PointF(680, 555);
+                        topTrianglep5 = new PointF(690, 565);
+                        topTrianglep6 = new PointF(670, 565);
+                        lowTrianglep4 = new PointF(680, 570);
+                        lowTrianglep5 = new PointF(692, 585);
+                        lowTrianglep6 = new PointF(668, 585);
+                        thrustTwo = new Rectangle(673, 585, 15, 3);
+
+                        obstaclesRight.RemoveAt(a);
+                        obstacleSpeeds.RemoveAt(a);
+                    }
                 }
             }
 
@@ -241,9 +324,13 @@ namespace SpaceRacer
             //time bar
             e.Graphics.FillRectangle(spaceShipBrush, timeBar);
             //obstacles (asteroidds)
-            for (int i = 0; i < obstacles.Count; i++)
+            for (int i = 0; i < obstaclesLeft.Count; i++)
             {
-                e.Graphics.FillEllipse(spaceShipBrush, obstacles[i]);
+                e.Graphics.FillEllipse(spaceShipBrush, obstaclesLeft[i]);
+            }
+            for (int a = 0; a < obstaclesRight.Count; a++)
+            {
+                e.Graphics.FillEllipse(spaceShipBrush, obstaclesRight[a]);
             }
         }
 
