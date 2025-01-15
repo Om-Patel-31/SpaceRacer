@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ -----------------------------------------------------------------------------------------------------
+|Created by: Om Patel                                                                                 |
+|Date: 2025-01-12                                                                                     |
+|Description: This is a simple space racing game (inspired from the classic "Space Racer" from Atari) |
+ -----------------------------------------------------------------------------------------------------
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -318,6 +326,37 @@ namespace SpaceRacer
                 {
                     outputLabel.Text = "Tie";
                 }
+
+                spaceShip1 = new Rectangle(270, 555, 20, 33);
+                spaceShip1Body = new Rectangle(275, 565, 10, 15);
+                topTrianglep1 = new PointF(280, 555);
+                topTrianglep2 = new PointF(290, 565);
+                topTrianglep3 = new PointF(270, 565);
+                lowTrianglep1 = new PointF(280, 570);
+                lowTrianglep2 = new PointF(292, 585);
+                lowTrianglep3 = new PointF(268, 585);
+                thrustOne = new Rectangle(273, 585, 15, 3);
+
+                spaceShip2 = new Rectangle(670, 555, 20, 33);
+                spaceShip2Body = new Rectangle(675, 565, 10, 15);
+                topTrianglep4 = new PointF(680, 555);
+                topTrianglep5 = new PointF(690, 565);
+                topTrianglep6 = new PointF(670, 565);
+                lowTrianglep4 = new PointF(680, 570);
+                lowTrianglep5 = new PointF(692, 585);
+                lowTrianglep6 = new PointF(668, 585);
+                thrustTwo = new Rectangle(673, 585, 15, 3);
+
+                p1Score = 0;
+                p2Score = 0;
+
+                time = 60;
+                timeBarHeight = 600;
+
+                obstaclesLeft.Clear();
+                obstacleSpeeds.Clear();
+
+                player = new SoundPlayer();
             }
         }
 
