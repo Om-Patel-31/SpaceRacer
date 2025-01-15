@@ -45,7 +45,7 @@
             // timeBarTimer
             // 
             this.timeBarTimer.Enabled = true;
-            this.timeBarTimer.Interval = 500;
+            this.timeBarTimer.Interval = 1000;
             this.timeBarTimer.Tick += new System.EventHandler(this.timeBarTimer_Tick);
             // 
             // outputLabel

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +17,18 @@ namespace SpaceRacer
         // Global Variables
         int time = 60;
         int timeBarHeight = 600;
+        int p1Score = 0;
+        int p2Score = 0;
 
         int obstacleWidth = 10;
-        int obstacleHeight = 3;
+        int obstacleHeight = 5;
 
         bool upPressed = false;
         bool downPressed = false;
         bool wPressed = false;
         bool sPressed = false;
+
+        SoundPlayer player = new SoundPlayer();
 
         Random randGen = new Random();
 
@@ -54,7 +59,6 @@ namespace SpaceRacer
 
 
         List<Rectangle> obstaclesLeft = new List<Rectangle>();
-        List<Rectangle> obstaclesRight = new List<Rectangle>();
         List<int> obstacleSpeeds = new List<int>();
 
         //Brushes
@@ -156,26 +160,19 @@ namespace SpaceRacer
 
             int randValue = randGen.Next(1, 101);
 
-            if (randValue < 4)
+            if (randValue < 8)  //left side asteroids
             {
-                int y = randGen.Next(0, this.Width - 50);
+                int y = randGen.Next(0, this.Height - 50);
                 Rectangle obstacle = new Rectangle(0, y, obstacleWidth, obstacleHeight);
                 obstaclesLeft.Add(obstacle);
                 obstacleSpeeds.Add(randGen.Next(1, 6));
             }
-            else if (randValue < 11)
+            else if (randValue < 17)  // right side asteroids
             {
-                int y = randGen.Next(0, this.Width - 50);
-                Rectangle obstacle = new Rectangle(0, y, obstacleWidth, obstacleHeight);
+                int y = randGen.Next(0, this.Height - 50);
+                Rectangle obstacle = new Rectangle(this.Width, y, obstacleWidth, obstacleHeight);
                 obstaclesLeft.Add(obstacle);
-                obstacleSpeeds.Add(randGen.Next(1, 6));
-            }
-            else if (randValue < 17)
-            {
-                int y = randGen.Next(0, this.Width - 50);
-                Rectangle obstacle = new Rectangle(0, y, obstacleWidth, obstacleHeight);
-                obstaclesLeft.Add(obstacle);
-                obstacleSpeeds.Add(randGen.Next(1, 6));
+                obstacleSpeeds.Add(-1*randGen.Next(1, 6));
             }
 
             for (int i = 0; i < obstaclesLeft.Count; i++)
@@ -200,8 +197,11 @@ namespace SpaceRacer
 
                     obstaclesLeft.RemoveAt(i);
                     obstacleSpeeds.RemoveAt(i);
+
+                    player = new SoundPlayer(Properties.Resources.crash);
+                    player.Play();
                 }
-                
+
                 if (spaceShip2.IntersectsWith(obstaclesLeft[i]))
                 {
                     spaceShip2 = new Rectangle(670, 555, 20, 33);
@@ -216,73 +216,83 @@ namespace SpaceRacer
 
                     obstaclesLeft.RemoveAt(i);
                     obstacleSpeeds.RemoveAt(i);
-                }
 
-                int newrandValue = randGen.Next(1, 101);
 
-                if (newrandValue < 4)
-                {
-                    int y = randGen.Next(0, this.Width - 50);
-                    Rectangle obstacle = new Rectangle(this.Width, y, obstacleWidth, obstacleHeight);
-                    obstaclesLeft.Add(obstacle);
-                    obstacleSpeeds.Add(randGen.Next(1, 6));
-                }
-                else if (newrandValue < 11)
-                {
-                    int y = randGen.Next(0, this.Width - 50);
-                    Rectangle obstacle = new Rectangle(this.Width, y, obstacleWidth, obstacleHeight);
-                    obstaclesLeft.Add(obstacle);
-                    obstacleSpeeds.Add(randGen.Next(1, 6));
-                }
-                else if (newrandValue < 17)
-                {
-                    int y = randGen.Next(0, this.Width - 50);
-                    Rectangle obstacle = new Rectangle(this.Width, y, obstacleWidth, obstacleHeight);
-                    obstaclesRight.Add(obstacle);
-                    obstacleSpeeds.Add(randGen.Next(1, 6));
-                }
-
-                for (int a = 0; a < obstaclesRight.Count; a++)
-                {
-                    int x = obstaclesRight[a].X - obstacleSpeeds[a];
-                    obstaclesRight[a] = new Rectangle(x, obstaclesRight[a].Y, obstacleWidth, obstacleHeight);
-                }
-
-                for (int  a = 0; a < obstaclesRight.Count; a++)
-                {
-                    if (spaceShip1.IntersectsWith(obstaclesRight[a]))
-                    {
-                        spaceShip1 = new Rectangle(270, 555, 20, 33);
-                        spaceShip1Body = new Rectangle(275, 565, 10, 15);
-                        topTrianglep1 = new PointF(280, 555);
-                        topTrianglep2 = new PointF(290, 565);
-                        topTrianglep3 = new PointF(270, 565);
-                        lowTrianglep1 = new PointF(280, 570);
-                        lowTrianglep2 = new PointF(292, 585);
-                        lowTrianglep3 = new PointF(268, 585);
-                        thrustOne = new Rectangle(273, 585, 15, 3);
-
-                        obstaclesLeft.RemoveAt(a);
-                        obstacleSpeeds.RemoveAt(a);
-                    }
-
-                    if (spaceShip2.IntersectsWith(obstaclesRight[a]))
-                    {
-                        spaceShip2 = new Rectangle(670, 555, 20, 33);
-                        spaceShip2Body = new Rectangle(675, 565, 10, 15);
-                        topTrianglep4 = new PointF(680, 555);
-                        topTrianglep5 = new PointF(690, 565);
-                        topTrianglep6 = new PointF(670, 565);
-                        lowTrianglep4 = new PointF(680, 570);
-                        lowTrianglep5 = new PointF(692, 585);
-                        lowTrianglep6 = new PointF(668, 585);
-                        thrustTwo = new Rectangle(673, 585, 15, 3);
-
-                        obstaclesRight.RemoveAt(a);
-                        obstacleSpeeds.RemoveAt(a);
-                    }
+                    player = new SoundPlayer(Properties.Resources.crash);
+                    player.Play();
                 }
             }
+
+            if (spaceShip1.Y == 0)
+            {
+                p1Score += 1;
+                spaceShip1 = new Rectangle(270, 555, 20, 33);
+                spaceShip1Body = new Rectangle(275, 565, 10, 15);
+                topTrianglep1 = new PointF(280, 555);
+                topTrianglep2 = new PointF(290, 565);
+                topTrianglep3 = new PointF(270, 565);
+                lowTrianglep1 = new PointF(280, 570);
+                lowTrianglep2 = new PointF(292, 585);
+                lowTrianglep3 = new PointF(268, 585);
+                thrustOne = new Rectangle(273, 585, 15, 3);
+
+                player = new SoundPlayer(Properties.Resources.win);
+                player.Play();
+            }
+
+            if (spaceShip2.Y == 0)
+            {
+                p2Score += 1;
+                spaceShip2 = new Rectangle(670, 555, 20, 33);
+                spaceShip2Body = new Rectangle(675, 565, 10, 15);
+                topTrianglep4 = new PointF(680, 555);
+                topTrianglep5 = new PointF(690, 565);
+                topTrianglep6 = new PointF(670, 565);
+                lowTrianglep4 = new PointF(680, 570);
+                lowTrianglep5 = new PointF(692, 585);
+                lowTrianglep6 = new PointF(668, 585);
+                thrustTwo = new Rectangle(673, 585, 15, 3);
+
+                player = new SoundPlayer(Properties.Resources.win);
+                player.Play();
+            }
+
+            if (spaceShip1.Y + spaceShip1.Height == 600)
+            {
+                spaceShip1 = new Rectangle(270, 555, 20, 33);
+                spaceShip1Body = new Rectangle(275, 565, 10, 15);
+                topTrianglep1 = new PointF(280, 555);
+                topTrianglep2 = new PointF(290, 565);
+                topTrianglep3 = new PointF(270, 565);
+                lowTrianglep1 = new PointF(280, 570);
+                lowTrianglep2 = new PointF(292, 585);
+                lowTrianglep3 = new PointF(268, 585);
+                thrustOne = new Rectangle(273, 585, 15, 3);
+
+
+                player = new SoundPlayer(Properties.Resources.wrong);
+                player.Play();
+            }
+
+            if (spaceShip2.Y + spaceShip2.Height == 600)
+            {
+                spaceShip2 = new Rectangle(670, 555, 20, 33);
+                spaceShip2Body = new Rectangle(675, 565, 10, 15);
+                topTrianglep4 = new PointF(680, 555);
+                topTrianglep5 = new PointF(690, 565);
+                topTrianglep6 = new PointF(670, 565);
+                lowTrianglep4 = new PointF(680, 570);
+                lowTrianglep5 = new PointF(692, 585);
+                lowTrianglep6 = new PointF(668, 585);   
+                thrustTwo = new Rectangle(673, 585, 15, 3);
+
+
+                player = new SoundPlayer(Properties.Resources.wrong);
+                player.Play();
+            }
+
+            p1ScoreLabel.Text = $"{p1Score}";
+            p2ScoreLabel.Text = $"{p2Score}";
 
             Refresh();
         }
@@ -291,9 +301,24 @@ namespace SpaceRacer
         private void timeBarTimer_Tick(object sender, EventArgs e)
         {
             time-=1;
-            timeBarHeight -= 5;
-            outputLabel.Text = "Time: " + time;
-            Refresh();
+            timeBarHeight -= 10;
+            if (time == 0)
+            {
+                gameTimer.Enabled = false;
+                timeBarTimer.Enabled = false;
+                if (p1Score > p2Score)
+                {
+                    outputLabel.Text = "Player1 Won!";
+                }
+                else if (p2Score > p1Score)
+                {
+                    outputLabel.Text = "Player2 Won!";
+                }
+                else
+                {
+                    outputLabel.Text = "Tie";
+                }
+            }
         }
 
         public Form1()
@@ -327,10 +352,6 @@ namespace SpaceRacer
             for (int i = 0; i < obstaclesLeft.Count; i++)
             {
                 e.Graphics.FillEllipse(spaceShipBrush, obstaclesLeft[i]);
-            }
-            for (int a = 0; a < obstaclesRight.Count; a++)
-            {
-                e.Graphics.FillEllipse(spaceShipBrush, obstaclesRight[a]);
             }
         }
 
